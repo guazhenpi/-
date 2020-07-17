@@ -6,6 +6,7 @@
 #include "qwidgetdraw.h"
 #include "qwidgetdrawsin.h"
 #include "qwidgetserialtx.h"
+#include "qwidgetserialrx.h"
 
 int main(int argc, char * argv[])
 {
@@ -45,6 +46,7 @@ int main(int argc, char * argv[])
 
     QWidget *mainWin = new QWidget();
     QWidgetSerialTx *serialTx = new QWidgetSerialTx(mainWin);
+    QWidgetSerialRx *serialRx = new QWidgetSerialRx(mainWin);
     mainWin->resize(300, 300);
     mainWin->show();
 

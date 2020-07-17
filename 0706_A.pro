@@ -8,6 +8,7 @@ SOURCES += \
     qwidgetdemo.cpp \
     qwidgetdraw.cpp \
     qwidgetdrawsin.cpp \
+    qwidgetserialrx.cpp \
     qwidgetserialtx.cpp
 
 HEADERS += \
@@ -15,5 +16,6 @@ HEADERS += \
     qwidgetdemo.h \
     qwidgetdraw.h \
     qwidgetdrawsin.h \
+    qwidgetserialrx.h \
     qwidgetserialtx.h \
     wave.h
