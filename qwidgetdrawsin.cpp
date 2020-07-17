@@ -1,67 +1,53 @@
-#include "qwidgetdraw.h"
-#include "wave.h"
+#include "qwidgetdrawsin.h"
+#include "ainwave.h"
 
 #include <QPainter>
 #include <QTimer>
 #include <QDebug>
-#include <QResizeEvent>
 
-QWidgetDraw::QWidgetDraw(QWidget *parent) : QWidget(parent)
+QWidgetDrawSin::QWidgetDrawSin(QWidget *parent) : QWidget(parent)
 {
     this->resize(10000,10000);
-    this->map = QPixmap(this->width(),this->height());
+    this->map = new QPixmap(this->width(),this->height());
 
-    this->map.fill(Qt::black);
+    this->map->fill(Qt::black);
 
     this->timer = new QTimer(parent);
     this->timer->start(3);//单位毫秒
 
 //    connect(timer,&QTimer::timeout,this,&QWidgetDraw::refresh);
-    connect(timer,&QTimer::timeout,this,&QWidgetDraw::sendData);
+    connect(timer,&QTimer::timeout,this,&QWidgetDrawSin::sendData);
 
-    connect(this,&QWidgetDraw::rxDataSingal,this,&QWidgetDraw::refreshFormData);
-    connect(this,&QWidgetDraw::rxDataSingal,this,&QWidgetDraw::testRx);
+    connect(this,&QWidgetDrawSin::rxDataSingalSin,this,&QWidgetDrawSin::refreshFormData);
 }
 
-void QWidgetDraw::resizeEvent(QResizeEvent *event)
-{
-    QPixmap cleanMap = QPixmap(this->width(), this->height());
-    cleanMap.fill(Qt::black);
-    this->map = cleanMap;
-    this->x = 0;
-}
 
-void QWidgetDraw::testRx(int data)
-{
-    qDebug()<<"Rx:"<<data;
-}
-
-void QWidgetDraw::sendData()
+void QWidgetDrawSin::sendData()
 {
     int data = 0;
     int height = this->height();
 
-    data = height -etcWave[index]*height/4096;
+    data = sinWave[index]*height / 160000 + height / 2;
 
-    this->index += 3;//隔三个取一个
+    this->index += 40;//隔三个取一个
 
-    if(this->index >= sizeof(etcWave)/sizeof(int))//防止越界
+    if(this->index >= sizeof(sinWave)/sizeof(int))//防止越界
             this->index = 0;
 
-    emit rxDataSingal(data);
+    emit rxDataSingalSin(data);
 
 }
 
-void QWidgetDraw::refreshFormData(int data)
+void QWidgetDrawSin::refreshFormData(int data)
 {
     //更新图片缓存
     QPainter *painter = new QPainter();
-    painter->begin(&(this->map));
+    painter->begin(this->map);
 
     //配置画笔
     QPen *pen = new QPen();
     pen->setWidth(2);
-    pen->setColor(Qt::green);
+    pen->setColor(Qt::red);
     painter->setPen(*pen);
 
     //画图到map(缓存)
@@ -71,11 +57,11 @@ void QWidgetDraw::refreshFormData(int data)
     this->update();
 }
 
-void QWidgetDraw::refresh()
+void QWidgetDrawSin::refresh()
 {
     //更新图片缓存
     QPainter *painter = new QPainter(this);
-    painter->begin(&(this->map));
+    painter->begin(this->map);
 
     //画图到map(缓存)
     this->draw(painter);
@@ -85,37 +71,23 @@ void QWidgetDraw::refresh()
 }
 
 
-void QWidgetDraw::paintEvent(QPaintEvent *event)
+void QWidgetDrawSin::paintEvent(QPaintEvent *event)
 {
     QPainter *painter = new QPainter();
 
     painter->begin(this);
 //    this->draw(painter);
     //画图到界面
-    painter->drawPixmap(0,0,this->map);
+    painter->drawPixmap(0,0,*this->map);
     painter->end();
 }
 
-void QWidgetDraw::drawDemo(QPainter *painter)
-{
-    QPen *pen = new QPen();
-    //配置画笔
-    pen->setColor(Qt::green);
 
-    //存储配置
-    painter->save();
-    painter->setPen(*pen);
-    //画图
-    painter->drawRect(0,0,100,100);
-    //重新加载原来配置
-    painter->restore();
-}
-
- void QWidgetDraw::draw(QPainter *painter)
+ void QWidgetDrawSin::draw(QPainter *painter)
  {
      //配置画笔
      QPen *pen = new QPen();
-     pen->setWidth(20);
+     pen->setWidth(2);
      pen->setColor(Qt::red);
      painter->setPen(*pen);
 /*
@@ -129,23 +101,25 @@ void QWidgetDraw::drawDemo(QPainter *painter)
      drawWaveFromArray(painter);
  }
 
-void QWidgetDraw::drawWaveFromArray(QPainter *painter)
+
+
+void QWidgetDrawSin::drawWaveFromArray(QPainter *painter)
 {
     int data = 0;
     int height = this->height();
 
-    data = height -etcWave[index]*height/4096;
+    data = height -sinWave[index]*height/4096;
     this->drawWave(painter,data);
 
     this->index += 3;//隔三个取一个
 
-    if(this->index >= sizeof(etcWave)/sizeof(int))//防止越界
+    if(this->index >= sizeof(sinWave)/sizeof(int))//防止越界
             this->index = 0;
 
 
 }
 
-void QWidgetDraw::drawWave(QPainter *painter, int data)
+void QWidgetDrawSin::drawWave(QPainter *painter, int data)
 {
 //    int data = 0;
 //    drawWave(painter,data);

@@ -1,14 +1,14 @@
-#ifndef QWIDGETDRAW_H
-#define QWIDGETDRAW_H
+#ifndef QWIDGETDRAWSIN_H
+#define QWIDGETDRAWSIN_H
 
 #include <QWidget>
 
-class QWidgetDraw : public QWidget
+class QWidgetDrawSin : public QWidget
 {
     Q_OBJECT
 public:
     QTimer *timer;
-    QPixmap map;
+    QPixmap *map;
     int x = 0;
     int y = 0;
     int dir = 0;
@@ -16,7 +16,7 @@ public:
     unsigned int index = 0;
     int lastData = 0;
 
-    explicit QWidgetDraw(QWidget *parent = nullptr);
+    explicit QWidgetDrawSin(QWidget *parent = nullptr);
 
     void draw(QPainter *painter);
     void drawDemo(QPainter *painter);
@@ -30,11 +30,10 @@ public:
     void testRx(int data);
 
 private:
-    void paintEvent(QPaintEvent *event) ;
-    void resizeEvent(QResizeEvent *event) ;
+    void paintEvent(QPaintEvent *event) override;
 
 signals:
-    void rxDataSingal(int data);
+    void rxDataSingalSin(int data);
 };
 
 #endif // QWIDGETDRAW_H

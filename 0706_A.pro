@@ -1,14 +1,19 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialport
 
 SOURCES += \
     layoutDemo.cpp \
     main.cpp \
     qwidgetdemo.cpp \
-    qwidgetdraw.cpp
+    qwidgetdraw.cpp \
+    qwidgetdrawsin.cpp \
+    qwidgetserialtx.cpp
 
 HEADERS += \
-    layoutDemo.h \
+    ainwave.h \
     qwidgetdemo.h \
-    qwidgetdraw.h
+    qwidgetdraw.h \
+    qwidgetdrawsin.h \
+    qwidgetserialtx.h \
+    wave.h
