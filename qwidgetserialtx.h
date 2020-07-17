@@ -8,9 +8,10 @@ class QWidgetSerialTx : public QWidget
 {
     Q_OBJECT
 public:
-    unsigned int index = 0;
     QTimer *timer;
     QSerialPort *com;
+
+    unsigned int index = 0;
     explicit QWidgetSerialTx(QWidget *parent = nullptr);
     void sendEcgPkg();
     int serialInit();
